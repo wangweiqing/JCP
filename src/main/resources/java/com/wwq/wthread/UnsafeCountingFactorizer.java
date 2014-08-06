@@ -11,16 +11,19 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 
-import net.jcip.annotations.ThreadSafe;
+@WebServlet(name = "wwqtest2", urlPatterns = { "/test2" })
+public class UnsafeCountingFactorizer implements Servlet {
 
-@ThreadSafe
-@WebServlet(name = "wwqtest", urlPatterns = { "/test1" })
-public class StatelessFactorizer implements Servlet {
+	private long count = 0;
 
+    public long getCount() {
+        return count;
+    }
+    
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -46,21 +49,34 @@ public class StatelessFactorizer implements Servlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		BigInteger i = extractFromRequest(req);
-		BigInteger[] factors = factor(i);
-		PrintWriter pw = res.getWriter();
-        pw.print(factors);
+        BigInteger[] factors = factor(i);
+        ++count;
+        encodeIntoResponse(res, factors,count);
 
 	}
 	
-	private BigInteger extractFromRequest(ServletRequest req) {
-        // TODO Auto-generated method stub
-        /*String num = req.getParameter("factor");*/
-		return new BigInteger("7");
+	void encodeIntoResponse(ServletResponse res, BigInteger[] factors,long count) {
+		PrintWriter pw;
+		try {
+			pw = res.getWriter();
+			String str_factors = factors.toString();
+			String str_count = String.valueOf(count);
+			pw.println("factors : " + str_factors);
+			pw.println("count : " + str_count);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       
     }
-	
-	 private BigInteger[] factor(BigInteger i) {
-	        // TODO Auto-generated method stub
-		 return new BigInteger[] { i };
-	    }
+
+    BigInteger extractFromRequest(ServletRequest req) {
+        return new BigInteger("7");
+    }
+
+    BigInteger[] factor(BigInteger i) {
+        // Doesn't really factor
+        return new BigInteger[] { i };
+    }
 
 }
