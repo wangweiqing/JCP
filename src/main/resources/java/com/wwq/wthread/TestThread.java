@@ -27,7 +27,7 @@ public class TestThread implements Runnable {
 		System.out.println(this.toString()+" : " + obj.toString());*/
 		try {
 			for (int i = 0; i < 10; i++) {
-				URL url = new URL("http://localhost:8080/concurrency/test2");
+				URL url = new URL("http://localhost:8080/concurrency/test7");
 				URLConnection conn = url.openConnection();
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(conn.getInputStream()));
@@ -37,11 +37,15 @@ public class TestThread implements Runnable {
 
 					System.out.println(line);
 				}
+				Thread.sleep(1000L);
 			}
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
